@@ -95,8 +95,8 @@ window.phantomLimb = (function() {
 		pointer.style.top      = '9999em';
 
 		pointer.style.opacity = options.opacity;
-		pointer.style.webkitTransformOriginX = options.x + 'px';
-		pointer.style.webkitTransformOriginY = options.y + 'px';
+		pointer.style.WebkitTransformOrigin = options.x + 'px ' + options.y + 'px';
+		pointer.style.MozTransformOrigin = options.x + 'px ' + options.y + 'px';
 
 		document.body.appendChild(pointer);
 		document.body.parentNode.style.cursor = 'none';
@@ -112,7 +112,8 @@ window.phantomLimb = (function() {
 			var angle = Math.acos(triHeight / triHypo) / (2 * Math.PI) * 360;
 			angle = angle / 1.5;
 			
-			pointer.style.webkitTransform = 'rotate(' + -angle + 'deg)';
+			pointer.style.WebkitTransform = 'rotate(' + -angle + 'deg)';
+			pointer.style.MozTransform = 'rotate(' + -angle + 'deg)';
 		}, false);
 	};
 	
