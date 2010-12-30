@@ -7,7 +7,16 @@
 		
 		<script src="phantomLimb.js" type="text/javascript"></script>
 		<script type="text/javascript">
-			window.addEventListener('load', phantomLimb.init, false);
+			window.addEventListener('load', function() {
+				phantomLimb.init({
+					pointer: {
+						src: 'phantomLimb.png',
+						x: 100,
+						y: -5,
+						opacity: 1
+					}
+				});
+			}, false);
 		</script>
 		
 		<style type="text/css">
@@ -22,10 +31,28 @@
 	</head>
 
 	<body>
-		<p>Phantom Limb</p>
+		<h1>Phantom Limb</h1>
 		
-		<div class="touch" ontouchstart="console.log(this, arguments);">ontouchstart (inline)</div>
-		<div class="touch" ontouchmove="console.log(this, arguments);">ontouchmove (inline)</div>
-		<div class="touch" ontouchend="console.log(this, arguments);">ontouchend (inline)</div>
+		<p>Make sure your console's open so you can tell stuff's actually happening.</p>
+		
+		<p>These have event handlers added programmatically:<br />
+			<span id="addedStart" class="touch">ontouchstart (added)</span>
+			<span id="addedMove" class="touch">ontouchmove (added)</span>
+			<span id="addedEnd" class="touch">ontouchend (added)</span>
+		</p>
+		
+		<script type="text/javascript">
+			document.getElementById('addedStart').addEventListener('touchstart', function() {console.log(this, arguments);}, false);
+			document.getElementById('addedMove').addEventListener('touchmove', function() {console.log(this, arguments);}, false);
+			document.getElementById('addedEnd').addEventListener('touchend', function() {console.log(this, arguments);}, false);
+		</script>
+
+		<br />
+		
+		<p>These have event handlers added inline:<br />
+			<span id="inlineStart" class="touch" ontouchstart="console.log(this, arguments);">ontouchstart (inline)</span>
+			<span id="inlineMove" class="touch" ontouchmove="console.log(this, arguments);">ontouchmove (inline)</span>
+			<span id="inlineEnd" class="touch" ontouchend="console.log(this, arguments);">ontouchend (inline)</span>
+		</p>
 	</body>
 </html>
