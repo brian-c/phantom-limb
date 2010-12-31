@@ -139,7 +139,7 @@ window.phantomLimb = (function() {
 		toggle.style.bottom = '5px';
 		toggle.style.zIndex = 9999;
 		
-		toggle.style.background = '#ffc';
+		toggle.style.background = '#cf0';
 		toggle.style.color = 'black';
 		toggle.style.border = '1px solid black';
 
@@ -171,7 +171,7 @@ window.phantomLimb = (function() {
 		if (shouldBe) {
 			isPointing = true;
 			pointer.style.display = '';
-			toggle.style.background = '#ffc';
+			toggle.style.background = '#cf0';
 			document.body.parentNode.style.cursor = 'crosshair';
 		} else {
 			isPointing = false;
@@ -191,6 +191,7 @@ window.phantomLimb = (function() {
 				x: 100,
 				y: -5,
 				opacity: 1,
+				show: true,
 				toggle: true
 			};
 			
@@ -207,6 +208,7 @@ window.phantomLimb = (function() {
 				
 				if (settings.src) {
 					createPointer(settings);
+					togglePointer(settings.show);
 					if (settings.toggle) createToggle();
 				}
 			} else {
