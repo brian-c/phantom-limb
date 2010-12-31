@@ -98,8 +98,9 @@ window.phantomLimb = (function() {
 		pointer.src = options.src;
 
 		pointer.style.position = 'fixed';
-		pointer.style.left     = '9999em';
-		pointer.style.top      = '9999em';
+		pointer.style.left = '9999em';
+		pointer.style.top = '9999em';
+		pointer.style.zIndex = 9999;
 
 		pointer.style.opacity = options.opacity;
 		pointer.style.WebkitTransformOrigin = options.x + 'px ' + options.y + 'px';
@@ -136,6 +137,7 @@ window.phantomLimb = (function() {
 		toggle.style.position = 'fixed';
 		toggle.style.right = '5px';
 		toggle.style.bottom = '5px';
+		toggle.style.zIndex = 9999;
 		
 		toggle.style.background = '#ffc';
 		toggle.style.color = 'black';
@@ -202,10 +204,10 @@ window.phantomLimb = (function() {
 					console.info('Phantom Limb must convert inline event handlers to attached in Firefox.');
 					convertInlines();
 				}
-
-				if (options.src) {
+				
+				if (settings.src) {
 					createPointer(settings);
-					if (options.toggle) createToggle();
+					if (settings.toggle) createToggle();
 				}
 			} else {
 				console.log('Phantom Limb won\'t do anything because touch is supported natively.');
