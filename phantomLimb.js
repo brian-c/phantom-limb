@@ -1,5 +1,13 @@
+// Phantom Limb
+// Simulate touch events in desktop browsers
+// Brian Carstensen <brian.carstensen@gmail.com>
+
 window.phantomLimb = (function() {
 	var supportsNativeTouch = 'ontouchstart' in document.createElement('button');
+	
+	// Some browser checking
+	var isMozilla = 'MozAppearance'    in document.createElement('span').style;
+	var isWebkit  = 'WebkitAppearance' in document.createElement('span').style;
 	
 	// This will fake an arbitrary event on a node and add in the extra touch pieces
 	var fireTouchEvent = function(originalEvent, newType) {
@@ -31,7 +39,7 @@ window.phantomLimb = (function() {
 	};
 
 	// Attach the main mouse event listeners to the document
-	var attachDocumentListeners = function() {
+	var attachDocTouchListeners = function() {
 		// Keep track for touchmove
 		var mouseIsDown = false;
 
@@ -52,8 +60,7 @@ window.phantomLimb = (function() {
 		// TODO: touchcancel?
 	};
 	
-	// Inline event listeners won't respond to manually dispathed events
-	// TODO: Should we delegate this to the document to catch nodes created later?
+	// Inline event listeners won't respond to manually dispathed events in Firefox
 	var convertInlines = function() {
 		touchables = document.querySelectorAll('[ontouchstart], [ontouchmove], [ontouchend]');
 		Array.prototype.forEach.call(touchables, function(node) {
@@ -82,12 +89,12 @@ window.phantomLimb = (function() {
 		}, this);
 	};
 	
-	// We want this available even if we don't end up using it
 	var pointer = document.createElement('img');
+	var isPointing = false;
 	
 	// Create a cheesy finger that follows around the cursor
 	// "options" includes src, x, y, and opacity
-	initPointer = function(options) {
+	createPointer = function(options) {
 		pointer.src = options.src;
 
 		pointer.style.position = 'fixed';
@@ -115,30 +122,96 @@ window.phantomLimb = (function() {
 			pointer.style.WebkitTransform = 'rotate(' + -angle + 'deg)';
 			pointer.style.MozTransform = 'rotate(' + -angle + 'deg)';
 		}, false);
+		
+		togglePointer(true);
+	};
+	
+	var toggle = document.createElement('button');
+
+	// A toggle switch for the pointer
+	var createToggle = function() {
+		toggle.innerHTML = '☝';
+		toggle.title = 'Phantom Limb';
+		
+		toggle.style.position = 'fixed';
+		toggle.style.right = '5px';
+		toggle.style.bottom = '5px';
+		
+		toggle.style.background = '#ffc';
+		toggle.style.color = 'black';
+		toggle.style.border = '1px solid black';
+
+		toggle.style.cursor = 'pointer';
+		
+		toggle.style.textShadow = '0 0 1px #000';
+		toggle.style.WebkitBoxShadow = '0 0 1px #000 inset';
+		
+		toggle.style.fontSize = '24px';
+		
+		toggle.style.margin = 0;
+		toggle.style.padding = 0;
+		
+		toggle.style.width = '1.5em';
+		toggle.style.height = '1.5em';
+		toggle.style.WebkitBorderRadius = '0.75em';
+		toggle.style.MozBorderRadius = '0.75em';
+		
+		toggle.addEventListener('click', function() {
+			togglePointer();
+		}, false);
+
+		document.body.appendChild(toggle);
+	};
+	
+	var togglePointer = function(shouldBe) {
+		shouldBe = shouldBe || !isPointing;
+
+		if (shouldBe) {
+			isPointing = true;
+			pointer.style.display = '';
+			toggle.style.background = '#ffc';
+			document.body.parentNode.style.cursor = 'crosshair';
+		} else {
+			isPointing = false;
+			pointer.style.display = 'none';
+			toggle.style.background = '#fff';
+			document.body.parentNode.style.cursor = '';
+		}
+		
+		if (isMozilla) convertInlines();
 	};
 	
 	return {
 		init: function(options) {
-			options = options || {};
+			settings = {
+				force: false,
+				src: '',
+				x: 100,
+				y: -5,
+				opacity: 1,
+				toggle: true
+			};
+			
+			if (options) for (var o in options) settings[o] = options[o];
 
-			console.info('Phantom Limb will attempt to reinterpret touch events as mouse events.');
-			
-			attachDocumentListeners();
-			convertInlines();
-			
-			if ('pointer' in options) initPointer(options.pointer);
+			if (!supportsNativeTouch || settings.force) {
+				console.info('Phantom Limb will attempt to reinterpret touch events as mouse events.');
+				attachDocTouchListeners();
+
+				if (isMozilla) {
+					console.info('Phantom Limb must convert inline event handlers to attached in Firefox.');
+					convertInlines();
+				}
+
+				if (options.src) {
+					createPointer(settings);
+					if (options.toggle) createToggle();
+				}
+			} else {
+				console.log('Phantom Limb won\'t do anything because touch is supported natively.');
+			}
 		},
 		
-		pointer: {
-			show: function() {
-				pointer.style.display = '';
-				document.body.parentNode.style.cursor = 'none';
-			},
-
-			hide: function() {
-				pointer.style.display = 'none';
-				document.body.parentNode.style.cursor = '';
-			}
-		}
+		togglePointer: togglePointer
 	};
 }());
