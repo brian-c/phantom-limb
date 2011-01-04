@@ -3,6 +3,16 @@
 // Brian Carstensen <brian.carstensen@gmail.com>
 
 window.phantomLimb = (function() {
+	if (typeof console === 'undefined') {
+		window.console = {
+			log:   function() {},
+			debug: function() {},
+			info:  function() {},
+			warn:  function() {},
+			error: function() {}
+		};
+	}
+
 	var supportsNativeTouch = 'ontouchstart' in document.createElement('button');
 	
 	// Some browser checking
