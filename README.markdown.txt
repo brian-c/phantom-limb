@@ -16,12 +16,12 @@ If that node is clickable (it's a button, a link, or has an click event handler)
 
 1. `mouseover`
 2. `mousemove` (only once)
-3. `mousedown`
-4. `mouseup`
 
 And if those events don't change the DOM, the browser finally fires:
 
-* `click`
+1. `mousedown`
+2. `mouseup`
+3 `click`
 
 This behavior is a convenience for the user to ensure that pages that utilize mouse events will generally be somewhat functional in a mouse-less environment, but you're going to have much more control and create a better experience in your mobile webapp by using native touch events. Generally not a problem, except desktop browsers don't do anything with touch events, so you'll have to do all your testing on the device itself (or the iOS Simulator app included with the iOS SDK), without the benefit of a decent debugger or comfortable posture.
 

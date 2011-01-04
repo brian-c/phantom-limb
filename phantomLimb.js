@@ -135,7 +135,8 @@ window.phantomLimb = (function() {
 		toggle.title = 'Phantom Limb';
 		
 		toggle.style.position = 'fixed';
-		toggle.style.right = '5px';
+		toggle.style.left = '50%';
+		toggle.style.marginLeft = '-0.75em';
 		toggle.style.bottom = '5px';
 		toggle.style.zIndex = 9999;
 		

@@ -3,13 +3,33 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Phantom Limb</title>
-		
+		<title>Phantom Limb demo page</title>
+
+		<!-- Firebug Lite, in case you don't have a console -->
+		<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js"></script>
+
+		<!-- Phantom Limb -->
 		<script src="phantomLimb.js" type="text/javascript"></script>
+		
+		<!-- Initialize Phantom Limb after the page loads -->
 		<script type="text/javascript">
 			window.addEventListener('load', function() {
+				// These are the default initialization settings
 				phantomLimb.init({
-					src: 'limb-black.png',
+					force: false,          // Map event listeners even if Phantom Limb thinks you're on a mobile device
+
+					src: 'limb-black.png', // Src of the pointer image--falsey for no pointer at all
+
+					x: 100,                // Finger tip point from the left
+
+					y: -5,                 // Finger tip point from the top
+					                       // (should be negative so the image doesn't eat your clicks)
+
+					opacity: 1,            // Desired opacity of the pointer image
+					
+					show: true,            // Show the pointer image by default
+					
+					toggle: true           // Show a pointer toggle button in the lower right corner
 				});
 			}, false);
 		</script>
@@ -31,7 +51,13 @@
 		<h1>Phantom Limb</h1>
 		<p>Brian Carstensen &lt;brian.carstensen@gmail.com&gt;</p>
 		
-		<h2>Make sure your console is open so you can tell stuff is actually happening.</h2>
+		<hr />
+		
+		<p>Each of these boxes will log something to the console when touched.</p>
+		<p>If you don't have a console, Firebug Lite is provided.</p>
+		<p>View source to see how to initialize Phantom Limb</p>
+		
+		<hr />
 		
 		<p>These have event handlers added programmatically:<br />
 			<span id="addedStart" class="touch">touchstart (added)</span>
@@ -44,6 +70,8 @@
 			document.getElementById('addedMove').addEventListener('touchmove', function() {console.log(this, arguments);}, false);
 			document.getElementById('addedEnd').addEventListener('touchend', function() {console.log(this, arguments);}, false);
 		</script>
+		
+		<hr />
 		
 		<p>These have event handlers added inline:<br />
 			<span id="inlineStart" class="touch" ontouchstart="console.log(this, arguments);">ontouchstart (inline)</span>
