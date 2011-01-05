@@ -124,7 +124,7 @@ window.phantomLimb = (function() {
 			pointer.style.top = e.clientY - options.y + 'px';
 			
 			var triWidth  = window.innerWidth - e.clientX;
-			var triHeight = window.innerHeight - e.clientY
+			var triHeight = window.innerHeight - e.clientY;
 			var triHypo   = Math.sqrt(Math.pow(triWidth, 2) + (Math.pow(triHeight, 2)));
 	
 			var angle = Math.acos(triHeight / triHypo) / (2 * Math.PI) * 360;
