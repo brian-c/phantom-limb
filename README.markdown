@@ -42,12 +42,7 @@ I added this pretty much for my own amusement, and you can shut it off with the 
 
 And [here it is in action](http://dl.dropbox.com/u/557187/metronome/index.html), applied to my on-again-off-again metronome iPad webapp. Run it in Safari to get the full effect.
 
-Phantom Limb can be activated from this bookmarklet <[Phantom Limb](#SEE-NOTE-BELOW)>
+Phantom Limb can be activated from this bookmarklet:
+javascript:void(function(scriptSrc,imgSrc){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init({src:imgSrc});}else{console.error('Phantom Limb could not be loaded');}},false);document.getElementsByTagName('head')[0].appendChild(script);}('http://dl.dropbox.com/u/557187/phantom-limb/phantomLimb.js','http://dl.dropbox.com/u/557187/phantom-limb/limb-black.png'));
 
 If you want to include it in your project, the latest source can be found on [GitHub](https://github.com/brian-c/phantom-limb).
-
----
-
-NOTE TO EDITOR: Here's the bookmarklet. Markdown doesn't like it in the link.
-
-javascript:void(function(scriptSrc,imgSrc){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init({src:imgSrc});}else{console.error('Phantom Limb could not be loaded');}},false);document.getElementsByTagName('head')[0].appendChild(script);}('http://dl.dropbox.com/u/557187/phantom-limb/phantomLimb.js','http://dl.dropbox.com/u/557187/phantom-limb/limb-black.png'));
