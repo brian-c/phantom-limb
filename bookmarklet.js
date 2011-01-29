@@ -10,5 +10,5 @@ javascript: void(function(scriptSrc, imgSrc) {
 		}
 	}, false);
 	
-	document.getElementsByTagName('head')[0].appendChild(script);
-}('http://dl.dropbox.com/u/557187/phantom-limb/phantomLimb.js', 'http://dl.dropbox.com/u/557187/phantom-limb/limb-black.png'));
+	document.head.appendChild(script);
+}('https://github.com/brian-c/phantom-limb/raw/master/phantomLimb.js', 'https://github.com/brian-c/phantom-limb/raw/master/limb-black.png'));
