@@ -24,6 +24,8 @@
 					                       // (should be negative so the image doesn't eat your clicks)
 
 					opacity: 1,            // Desired opacity of the pointer image
+					
+					lefty: false,           // For the southpaws
 				});
 			}, false);
 		</script>
@@ -35,13 +37,14 @@
 			
 			hr {
 				border: 1px solid #ccc;
-				border-width: 5px 0 0 0;
+				border-width: 4px 0 0 0;
 			}
 			
 			.touch {
 				background: #cdf;
 				display: inline-block;
 				border: 1px solid #789;
+				-moz-border-radius: 5px;
 				-webkit-border-radius: 5px;
 				margin: 0.25em 1em 0 0;
 				padding: 0.5em;
@@ -59,6 +62,7 @@
 		
 		<p>Phantom Limb simulates basic touch events in desktop browsers, allowing you to utilize the debugging goodness of the WebKit Inspector and Firebug while developing a mobile web app. A wordlier explanation is at <a href="http://www.vodori.com/blog/phantom-limb.html ">http://www.vodori.com/blog/phantom-limb.html</a>.</p>
 		<p>View source to see how to initialize Phantom Limb. <a href="https://github.com/brian-c/phantom-limb">Source is on GitHub</a>.</p>
+		<p>Here's a bookmarklet: <a href="javascript:void(function(scriptSrc,config){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init(config)}else{console.error('Phantom Limb could not be loaded')}},false);document.head.appendChild(script)}('https://github.com/brian-c/phantom-limb/raw/master/phantomLimb.js',{src:'https://github.com/brian-c/phantom-limb/raw/master/limb-black.png',lefty:false}));">Phantom Limb</a>.</p>
 		
 		<hr />
 		
@@ -115,6 +119,8 @@
 		</ul>
 		
 		<h3>January 21, 2011</h3>
-		<ul><li>Initial release</li></ul>
+		<ul>
+			<li>Initial release</li>
+		</ul>
 	</body>
 </html>

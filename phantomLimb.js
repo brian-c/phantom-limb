@@ -114,15 +114,15 @@ window.phantomLimb = (function() {
 			pointer.style.left = e.clientX - options.x + 'px';
 			pointer.style.top = e.clientY - options.y + 'px';
 			
-			var triWidth  = window.innerWidth  - e.clientX;
+			var triWidth  = (options.lefty ? 0 : -window.innerWidth) + e.clientX;
 			var triHeight = window.innerHeight - e.clientY;
 			var triHypo   = Math.sqrt(Math.pow(triWidth, 2) + (Math.pow(triHeight, 2)));
 	
 			var angle = Math.acos(triHeight / triHypo) / (2 * Math.PI) * 360;
 			angle = angle / 1.5;
 			
-			pointer.style.WebkitTransform = 'rotate(' + -angle + 'deg)';
-			pointer.style.MozTransform = 'rotate(' + -angle + 'deg)';
+			pointer.style.WebkitTransform = 'rotate(' + (options.lefty ? 1 : -1) * angle + 'deg) scaleX(' + (options.lefty ? -1 : 1) + ')';
+			pointer.style.MozTransform = 'rotate(' + (options.lefty ? 1 : -1) * angle + 'deg) scaleX(' + (options.lefty ? -1 : 1) + ')';
 		}, false);
 	};
 	
@@ -133,7 +133,7 @@ window.phantomLimb = (function() {
 				force: false,
 				src: '',
 				x: 100,
-				y: -5,
+				y: -7,
 				opacity: 1,
 			};
 			
