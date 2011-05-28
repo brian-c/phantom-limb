@@ -1,1 +1,0 @@
-Phantom Limb simulates basic touch events in desktop browsers, allowing you to utilize the debugging goodness of the WebKit Inspector and Firebug while developing a mobile web app. A wordlier explanation is at [http://www.vodori.com/blog/phantom-limb.html](http://www.vodori.com/blog/phantom-limb.html).
