@@ -3,34 +3,47 @@
 // Brian Carstensen <brian.carstensen@gmail.com>
 
 window.phantomLimb = (function() {
-	debug = false;
+	debug = true;
 
 	var supportsNativeTouch = 'ontouchstart' in document.createElement('button');
 	
 	// This will fake an arbitrary event on a node and add in the extra touch-related properties
-	var fireTouchEvent = function(originalEvent, newType) {
-		var newEvent = document.createEvent('MouseEvent');
-		newEvent.initMouseEvent(newType, true, true, window, originalEvent.detail,
+	var fireTouchEvent = function(originalEvent, newType, existingEvent) {
+		var newEvent = existingEvent;
+		
+		if (!newEvent) {
+			if (debug) console.log('Created simulated ' + newType + ' event', newEvent);
+			newEvent = document.createEvent('MouseEvent');
+			newEvent.initMouseEvent(newType, true, true, window, originalEvent.detail,
 				originalEvent.screenX, originalEvent.screenY, originalEvent.clientX, originalEvent.clientY,
 				originalEvent.ctrlKey, originalEvent.shiftKey, originalEvent.altKey, originalEvent.metaKey,
 				originalEvent.button, originalEvent.relatedTarget
-		);
+			);
+			
+			if (!('identifier' in newEvent)) {
+				var newDate = new Date;
+				newEvent.identifier = 't'+newDate.getTime();
+			}
+		
+		}
 		
 		// Touch events have a touches array, which contains kinda-sub-event objects
 		// In this case we'll only need the one
-		if (!('touches' in newEvent)) newEvent.touches = newEvent.targetTouches = [newEvent];
+		if (!('touches' in newEvent)) newEvent.touches = newEvent.targetTouches = newEvent.changedTouches = [newEvent];
 
 		// And and they have "page" coordinates, which I guess are just like screen coordinates
-		if (!('pageX' in newEvent)) newEvent.pageX = originalEvent.clientX;
-		if (!('pageY' in newEvent)) newEvent.pageY = originalEvent.clientY;
+		newEvent.pageX = originalEvent.clientX;
+		newEvent.pageY = originalEvent.clientY;
 
 		// TODO: Read the spec, fill in what's missing
 
-		if (debug) console.log('Created simulated ' + newType + ' event', newEvent);
+		
 
 		// Fire off the new event
 		if (debug) console.log('Firing simulated ' + newType + ' event', originalEvent.target);
 		originalEvent.target.dispatchEvent(newEvent);
+		
+		return newEvent;
 	};
 	
 	// node.ontouch* must be added as an event listener
@@ -59,12 +72,13 @@ window.phantomLimb = (function() {
 	var attachDocTouchListeners = function() {
 		// Keep track for touchmove
 		var mouseIsDown = false;
+		var currentTouchEvent = null;
 
 		document.addEventListener('mousedown', function(e) {
 			convertPropped(e.target, 'touchstart');
 			convertInlined(e.target, 'touchstart');
 
-			fireTouchEvent(e, 'touchstart');
+			currentTouchEvent = fireTouchEvent(e, 'touchstart');
 
 			mouseIsDown = true;
 		}, false);
@@ -75,7 +89,7 @@ window.phantomLimb = (function() {
 			convertPropped(e.target, 'touchmove');
 			convertInlined(e.target, 'touchmove');
 
-			fireTouchEvent(e, 'touchmove');
+			fireTouchEvent(e, 'touchmove', currentTouchEvent);
 		}, false);
 
 		document.addEventListener('mouseup', function(e) {
@@ -84,7 +98,10 @@ window.phantomLimb = (function() {
 
 			mouseIsDown = false;
 
-			fireTouchEvent(e, 'touchend');
+			fireTouchEvent(e, 'touchend', currentTouchEvent);
+			
+			//clear saved touch
+			currenTouchEvent = null;
 		}, false);
 
 		// TODO: touchcancel?
