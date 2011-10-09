@@ -8,7 +8,7 @@ window.phantomLimb = (function() {
 	var supportsNativeTouch = 'ontouchstart' in document.createElement('button');
 	
 	// This will fake an arbitrary event on a node and add in the extra touch-related properties
-	var fireTouchEvent = function(originalEvent, newType, exisitingEvent) {
+	var fireTouchEvent = function(originalEvent, newType, existingEvent) {
 		var newEvent = existingEvent;
 		
 		if (!newEvent) {
