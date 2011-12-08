@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<title>Phantom Limb 2.0</title>
+
+		<style type="text/css">
+			.surface {
+				background: #eee;
+				border: 1px solid #ccc;
+				display: inline-block;
+				height: 200px;
+				width: 200px;
+			}
+
+			._phantom-limb_finger {
+				background: rgba(128, 128, 128, 0.5);
+				border: 2px solid rgb(128, 128, 128);
+				border-radius: 50%;
+				height: 44px;
+				margin: -22px 0 0 -22px;
+				pointer-events: none;
+				position: fixed;
+				width: 44px;
+			}
+		</style>
+
+		<link href="phantom-limb.css" rel="stylesheet" type="text/css">
+	</head>
+
+	<body>
+		<span id="left"  class="surface"></span>
+		<span id="right" class="surface"></span>
+
+		<script type="text/javascript">
+			function log(e) {console.log(this.id, e.type, e.clientX, e.clientY, e.touches, e.targetTouches);}
+
+			var surfaces = document.getElementsByClassName('surface');
+
+			for (var i = 0; i < surfaces.length; i++) {
+				surfaces[i].addEventListener('mousedown', log, false);
+				surfaces[i].addEventListener('mousemove', log, false);
+				surfaces[i].addEventListener('mouseup', log, false);
+				surfaces[i].addEventListener('click', log, false);
+
+				surfaces[i].addEventListener('touchstart', log, false);
+				surfaces[i].addEventListener('touchmove', log, false);
+				surfaces[i].addEventListener('touchend', log, false);
+			}
+		</script>
+
+		<script src="phantom-limb.js" type="text/javascript"></script>
+	</body>
+</html>
