@@ -6,6 +6,7 @@
 	// Goals for 2.0:
 	// * Capture and end all natural click events, re-fire after touchend
 	// * Support for at least two fingers
+	// * Gestures
 	// * No configuration
 
 	"use strict";
@@ -168,7 +169,7 @@
 
 	// Prevent all mousedown event from doing anything.
 	// We'll fire one manually at touchend.
-	capture(document, 'mousedown', function(e) {
+	function phantomTouchStart(e) {
 		if (e.synthetic) return;
 
 		mouseIsDown = true;
@@ -177,7 +178,7 @@
 		e.stopPropagation();
 
 		fireTouchEvents('touchstart', e);
-	});
+	}
 
 	// Set each finger's position target.
 	// Pressing alt engages the second finger.
@@ -209,7 +210,7 @@
 
 	// Prevent all mousemove events from firing.
 	// We'll fire one (and only one) manually at touchend.
-	capture(document, 'mousemove', function(e) {
+	function phantomTouchMove(e) {
 		if (e.synthetic) return;
 
 		e.preventDefault();
@@ -220,11 +221,11 @@
 		if (mouseIsDown) {
 			fireTouchEvents('touchmove', e);
 		}
-	});
-	
+	}
+
 	// Prevent all mouseup events from firing.
 	// We'll fire one manually at touchend.
-	capture(document, 'mouseup', function(e) {
+	function phantomTouchEnd(e) {
 		if (e.synthetic) return;
 
 		mouseIsDown = false;
@@ -237,6 +238,7 @@
 		fingers.forEach(function(finger) {
 			if (!finger.target) return;
 
+			// Mobile Safari moves all the mouse event to fire after the touchend event.
 			finger.target.dispatchEvent(createMouseEvent('mouseover', e, finger));
 			finger.target.dispatchEvent(createMouseEvent('mousemove', e, finger));
 			finger.target.dispatchEvent(createMouseEvent('mousedown', e, finger));
@@ -245,13 +247,19 @@
 			finger.target.dispatchEvent(createMouseEvent('mouseup', e, finger));
 			finger.target.dispatchEvent(createMouseEvent('click', e, finger));
 		});
-	});
+	}
 
 	// Prevent clicks. We'll handle them manually.
-	capture(document, 'click', function(e) {
+	function phantomClick(e) {
 		if (e.synthetic) return;
 
 		e.preventDefault();
 		e.stopPropagation();
-	});
+	}
+
+	// TODO: Make these toggleable.
+	capture(document, 'mousedown', phantomTouchStart);
+	capture(document, 'mousemove', phantomTouchMove);
+	capture(document, 'mouseup', phantomTouchEnd);
+	capture(document, 'click', phantomClick);
 }());
