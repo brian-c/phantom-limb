@@ -62,7 +62,14 @@
 		
 		this.node = document.createElement('span');
 		this.node.classList.add('_phantom-limb_finger');
-		document.body.appendChild(this.node);
+
+		// Add a node per finger.
+		// Probably not the most efficient way to do this.
+		if (document.readyState === 'complete') {
+			document.body.appendChild(this.node);
+		} else {
+			listen(window, 'load', this, 'place');
+		}
 	}
 
 	Finger.prototype = {
@@ -72,6 +79,10 @@
 		y: NaN,
 
 		target: null,
+
+		place: function() {
+			document.body.appendChild(this.node);
+		},
 
 		hide: function() {
 			this.node.style.display = 'none';
