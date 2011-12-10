@@ -23,30 +23,29 @@
 				-moz-border-radius: 5px;
 				-webkit-border-radius: 5px;
 				margin: 0.25em 1em 0 0;
-				padding: 0.5em;
+				padding: 1em 0;
 				text-align: center;
 				width: 11em;
 			}
 		</style>
 
-		<link href="phantom-limb.css" rel="stylesheet" type="text/css">
+		<script src="phantom-limb.js" type="text/javascript"></script>
+		<link href="phantom-limb.css" rel="stylesheet" type="text/css" />
 	</head>
 
 	<body>
 		<h1>Phantom Limb</h1>
-		<p>Brian Carstensen &lt;brian.carstensen@gmail.com&gt;</p>
+		<p>Brian Carstensen &lt;<a href="mailto:brian.carstensen@gmail.com">brian.carstensen@gmail.com</a>&gt;</p>
 		
 		<hr />
 		
-		<p>Phantom Limb simulates basic touch events in desktop browsers, allowing you to utilize the debugging goodness of the WebKit Inspector and Firebug while developing a mobile web app. A wordlier explanation is at <a href="http://www.vodori.com/blog/phantom-limb.html ">http://www.vodori.com/blog/phantom-limb.html</a>.</p>
+		<p>Phantom Limb simulates basic touch events in desktop browsers, allowing you to utilize the debugging goodness of the WebKit Inspector and Firebug while developing a mobile web app. Official site at <a href="http://viewinglens.com/phantom-limb">http://viewinglens.com/phantom-limb</a>.</p>
 		<p>View source to see how to initialize Phantom Limb. <a href="https://github.com/brian-c/phantom-limb">Source is on GitHub</a>.</p>
-		<p>Here's a bookmarklet: <a href="javascript:void(function(scriptSrc,config){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init(config)}else{console.error('Phantom Limb could not be loaded')}},false);document.head.appendChild(script)}('https://github.com/brian-c/phantom-limb/raw/master/phantomLimb.js',{src:'https://github.com/brian-c/phantom-limb/raw/master/limb-black.png',lefty:false}));">Phantom Limb</a>.</p>
 		
 		<hr />
 		
 		<h2>Demo</h2>
-		<p>Each of these boxes will log something to the console when touched, so keep on eye on it.</p>
-		<p>Hold <kbd>alt</kbd> to engage a second finger. Hold <kbd>shift</kbd> to lock its position relative to the first's.</p>
+		<p>Each of these boxes will <strong>log something to the console when touched</strong>, so keep on eye on it. Hold <kbd>alt</kbd> to engage a second finger. Hold <kbd>shift</kbd> to lock its position relative to the first's.</p>
 		
 		<script type="text/javascript">
 			// Here's the function that'll run
@@ -84,24 +83,5 @@
 			<span id="inlineMove" class="touch" ontouchmove="doSomeLogging.apply(this, arguments);">ontouchmove (inline)</span>
 			<span id="inlineEnd" class="touch" ontouchend="doSomeLogging.apply(this, arguments);">ontouchend (inline)</span>
 		</p>
-		
-		<hr />
-		
-		<h2>Version history</h2>
-		
-		<h3>January 28, 2011</h3>
-		<ul>
-			<li>Added support for event handlers as properties</li>
-			<li>Property- and attribute-style handlers are converted on the fly instead of on page load</li>
-			<li>Pointed the bookmarklet at GitHub instead of my Dropbox</li>
-			<li>Removed toggle button. You can still call <code>phantomLimb.togglePointer();</code></li>
-		</ul>
-		
-		<h3>January 21, 2011</h3>
-		<ul>
-			<li>Initial release</li>
-		</ul>
-
-		<script src="phantom-limb.js" type="text/javascript"></script>
 	</body>
 </html>

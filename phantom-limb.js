@@ -1,17 +1,9 @@
 (function() {
 	// Phantom Limb
-	// Brian Carstensen
-	// brian.carstensen@gmail.com
-
-	// Goals for 2.0:
-	// * Capture and end all natural click events, re-fire after touchend
-	// * Support for at least two fingers
-	// * Gestures
-	// * No configuration
+	// http://viewinglens.com/phantom-limb
+	// Brian Carstensen <brian.carstensen@gmail.com>
 
 	"use strict";
-
-	// TODO: Conversion of "ontouch*" properties on elements to proper event listeners.
 
 	function mixin(base, over) {
 		if (arguments.length > 2) {
@@ -111,6 +103,7 @@
 		}
 	};
 
+	// Here we'll instantiate the fingers we'll use in the rest of the script.
 	var fingers = [
 		new Finger(),
 		new Finger()
@@ -145,6 +138,9 @@
 
 			// Set up a new event with the coordinates of the finger.
 			var touch = createMouseEvent(eventName, originalEvent, finger);
+
+			// TODO: Conversion of "ontouch*" properties (and attributes in Firefox).
+			// Is this a good place to do it?
 
 			// Set this so we can match shared target later.
 			touch.fingerTarget = finger.target;
@@ -204,6 +200,8 @@
 
 		// Just follow the mouse.
 		fingers[0].move(x, y);
+
+		// TODO: Determine modifier keys independent of mouse movement.
 
 		if (e.altKey) {
 			if (e.shiftKey) {
