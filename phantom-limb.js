@@ -268,9 +268,12 @@
 		e.stopPropagation();
 	}
 
-	// TODO: Make these toggleable.
+	// TODO: Make these toggleable?
 	capture(document, 'mousedown', phantomTouchStart);
 	capture(document, 'mousemove', phantomTouchMove);
 	capture(document, 'mouseup', phantomTouchEnd);
 	capture(document, 'click', phantomClick);
+
+	// Finally, we'll add a class to the root element.
+	document.documentElement.classList.add('_phantom-limb');
 }());

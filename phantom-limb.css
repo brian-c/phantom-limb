@@ -1,8 +1,9 @@
-html {
-	cursor: none;
+._phantom-limb,
+._phantom-limb a {
+	cursor: none !important;
 }
 
-._phantom-limb_finger {
+._phantom-limb ._phantom-limb_finger {
 	background: rgba(128, 128, 128, 0.5);
 	border: 2px solid rgb(128, 128, 128);
 	border-radius: 50%;
