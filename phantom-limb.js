@@ -136,11 +136,24 @@
 		fingers.forEach(function(finger) {
 			if (!finger.target) return;
 
+			// Convert "ontouch*" properties and attributes to listeners.
+			var onEventName = 'on' + eventName;
+
+			if (onEventName in finger.target) {
+				console.warn('Converting `' + onEventName + '` property to event listener.', finger.target);
+				listen(finger.target, eventName, finger.target[onEventName]);
+				delete finger.target[onEventName];
+			}
+
+			if (finger.target.hasAttribute(onEventName)) {
+				console.warn('Converting `' + onEventName + '` attribute to event listener.', finger.target);
+				var handler = new Function('event', finger.target.getAttribute(onEventName));
+				listen(finger.target, eventName, handler);
+				finger.target.removeAttribute(onEventName);
+			}
+
 			// Set up a new event with the coordinates of the finger.
 			var touch = createMouseEvent(eventName, originalEvent, finger);
-
-			// TODO: Conversion of "ontouch*" properties (and attributes in Firefox).
-			// Is this a good place to do it?
 
 			// Set this so we can match shared target later.
 			touch.fingerTarget = finger.target;
