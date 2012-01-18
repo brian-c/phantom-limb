@@ -1,20 +1,27 @@
-(function() {
+(function(GLOBAL) {
 	// Phantom Limb
 	// http://viewinglens.com/phantom-limb
 	// Brian Carstensen <brian.carstensen@gmail.com>
 
 	"use strict";
 
+	if (!!~navigator.userAgent.indexOf('iP')) return;
+
+	var config = mixin({
+		debug: false,
+		css: true
+	}, GLOBAL.phantomLimb || {});
+
+	if (GLOBAL.phantomLimb) GLOBAL.phantomLimb = config;
+
+	function log() {
+		if (config.debug) console.log.apply(console, arguments);
+	}
+
 	function mixin(base, over) {
-		if (arguments.length > 2) {
-			for (var i = 1; i < arguments.length; i++) {
-				mixin(base, arguments[i]);
-			}
-		} else {
-			for (var propertyName in over) {
-				if (!over.hasOwnProperty(propertyName)) continue;
-				base[propertyName] = over[propertyName];
-			}
+		for (var propertyName in over) {
+			if (!over.hasOwnProperty(propertyName)) continue;
+			base[propertyName] = over[propertyName];
 		}
 
 		return base;
@@ -46,6 +53,9 @@
 		var args = Array.prototype.slice.call(arguments).concat([true]);
 		listen.apply(null, args);
 	}
+
+	// Keep track of whether the mouse is down.
+	var mouseIsDown = false;
 
 	// A Finger is a representation on the screen.
 	// It keeps track of its position and the node that it's over.
@@ -89,6 +99,7 @@
 				this.hide();
 
 				this.target = null;
+				this.startTarget = null;
 			} else {
 				this.show();
 
@@ -98,7 +109,7 @@
 				this.x = x;
 				this.y = y;
 
-				this.target = document.elementFromPoint(x, y);
+				if (!mouseIsDown) this.target = document.elementFromPoint(x, y);
 			}
 		}
 	};
@@ -130,6 +141,9 @@
 	// Given a mouse event, fire a touch event for each finger.
 	// Add the appropriate touch-specific event properties.
 	function fireTouchEvents(eventName, originalEvent) {
+		// All touch events, including "touchend".
+		var events = [];
+
 		var touches = [];
 
 		// For each finger with a target, create a touch event.
@@ -161,17 +175,20 @@
 			// Touches and target touches will always be the same,
 			// since we've only got one input device.
 			touch.touches = touches;
-			touch.changedTouches = touches;
 
 			// This is built after all the touch events exist.
 			touch.targetTouches = [];
 
-			touches.push(touch);
+			// Changed and target touches wil be the same, since they're locked.
+			touch.changedTouches = touch.targetTouches;
+
+			events.push(touch);
+			if (eventName !== 'touchend') touches.push(touch);
 		});
 
 		// Loop through the touches array and fill in their targetTouches arrays.
-		touches.forEach(function(first) {
-			touches.forEach(function(second) {
+		events.forEach(function(first) {
+			events.forEach(function(second) {
 				if (first.fingerTarget === second.fingerTarget) {
 					first.targetTouches.push(second);
 				}
@@ -179,14 +196,11 @@
 		});
 
 		// Then fire the events.
-		for (var i = 0; i < fingers.length; i++) {
-			if (touches[i]) fingers[i].target.dispatchEvent(touches[i]);
-		}
+		events.forEach(function(event) {
+			event.fingerTarget.dispatchEvent(event);
+		});
 	}
 	
-	// Keep track of whether the mouse is down.
-	var mouseIsDown = false;
-
 	// Prevent all mousedown event from doing anything.
 	// We'll fire one manually at touchend.
 	function phantomTouchStart(e) {
@@ -287,4 +301,4 @@
 
 	// Finally, we'll add a class to the root element.
 	document.documentElement.classList.add('_phantom-limb');
-}());
+}(this));

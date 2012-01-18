@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="initial-scale=1, user-scalable=no" />
+
+		<title>Phantom Limb test page</title>
+
+		<link href="../phantom-limb.css" rel="stylesheet" />
+
+		<style type="text/css">
+			html {
+				height: 100%;
+			}
+
+				body {
+					height: 100%;
+					margin: 0;
+				}
+
+					.surface {
+						background: #eee;
+						border: 1px solid #ccc;
+						-moz-box-sizing: border-box;
+						-webkit-box-sizing: border-box;
+						box-sizing: border-box;
+						float: left;
+						height: 50%;
+						vertical-align: middle;
+						width: 50%;
+					}
+
+					.surface.active {
+						background: #cfc;
+					}
+		</style>
+	</head>
+
+	<body>
+		<div id="top-left" class="surface"></div>
+		<div id="top-right" class="surface"></div>
+		<div id="bottom-left" class="surface"></div>
+		<div id="bottom-right" class="surface"></div>
+
+		<script src="Surface.js" type="text/javascript"></script>
+
+		<script type="text/javascript">
+			document.addEventListener('touchstart', function(e) {
+				e.preventDefault();
+			}, false);
+
+			surfaces = document.getElementsByClassName('surface');
+			surfaces = Array.prototype.map.call(surfaces, function(element) {
+				var surface = new Surface(element);
+				surface.init();
+
+				return surface;
+			});
+
+			phantomLimb = {debug: true};
+		</script>
+
+		<script src="../phantom-limb.js" type="text/javascript"></script>
+	</body>
+</html>

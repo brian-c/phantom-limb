@@ -10,6 +10,7 @@ This is a complete rewrite of the old version. Totally unfinished.
 
 2.0 Improvements
 ----------------
+
 * Multi-touch support. Like the Apple's iOS Simulator app, hold down option to get a second finger, and shift to lock that finger's position relative to the first.
 
 * Closer to the actual mobile Safari series of events. All mouse events are captured and stopped, and re-fired after the last touch event takes place.
