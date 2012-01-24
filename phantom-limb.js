@@ -212,33 +212,47 @@
 		fireTouchEvents('touchstart', e);
 	}
 
+	// The center between two fingers
+	var centerX = NaN;
+	var centerY = NaN;
+
 	// Set each finger's position target.
 	// Pressing alt engages the second finger.
 	// Pressing shift locks the second finger's position relative to the first's.
 	function moveFingers(e) {
-		var x = e.clientX;
-		var y = e.clientY;
-
 		// We'll use this if the second is locked with the first.
-		var changeX = x - fingers[0].x || 0;
-		var changeY = y - fingers[0].y || 0;
+		var changeX = e.pageX - fingers[0].x || 0;
+		var changeY = e.pageY - fingers[0].y || 0;
 
-		// Just follow the mouse.
-		fingers[0].move(x, y);
+		// The first finger just follows the mouse.
+		fingers[0].move(e.pageX, e.pageY);
 
 		// TODO: Determine modifier keys independent of mouse movement.
 
 		if (e.altKey) {
-			if (e.shiftKey) {
-				// Lock the second relative to the first.
-				fingers[1].move(fingers[1].x + changeX, fingers[1].y + changeY);
-			} else {
-				// Place the second opposite the first.
-				fingers[1].move(window.innerWidth - x, window.innerHeight - y);
+			// Reset the center.
+			if (!centerX && !centerY) {
+				centerX = window.innerWidth / 2;
+				centerY = window.innerHeight / 2;
 			}
+
+			// Lock the center with the first finger.
+			if (e.shiftKey) {
+				centerX += changeX;
+				centerY += changeY;
+			}
+
+			var secondX = centerX + (centerX - e.pageX);
+			var secondY = centerY + (centerY - e.pageY);
+
+			fingers[1].move(secondX, secondY);
 		} else {
-			// Disengage the second.
+			// Disengage the second finger.
 			fingers[1].move(NaN, NaN);
+
+			// Reset the center next time the alt key is held.
+			centerX = NaN;
+			centerY = NaN;
 		}
 	}
 
