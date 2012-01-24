@@ -61,7 +61,7 @@
 	// It keeps track of its position and the node that it's over.
 	function Finger(options) {
 		mixin(this, options);
-		
+
 		this.node = document.createElement('span');
 		this.node.classList.add('_phantom-limb_finger');
 
@@ -144,8 +144,6 @@
 		// All touch events, including "touchend".
 		var events = [];
 
-		var touches = [];
-
 		// For each finger with a target, create a touch event.
 		fingers.forEach(function(finger) {
 			if (!finger.target) return;
@@ -169,38 +167,38 @@
 			// Set up a new event with the coordinates of the finger.
 			var touch = createMouseEvent(eventName, originalEvent, finger);
 
-			// Set this so we can match shared target later.
-			touch.fingerTarget = finger.target;
+			// Set this so we can match shared targets later.
+			touch._fingerTarget = finger.target;
 
-			// Touches and target touches will always be the same,
-			// since we've only got one input device.
-			touch.touches = touches;
-
-			// This is built after all the touch events exist.
+			// These will be filled in once all touch events are created.
+			touch.touches = [];
+			touch.changedTouches = [];
 			touch.targetTouches = [];
 
-			// Changed and target touches wil be the same, since they're locked.
-			touch.changedTouches = touch.targetTouches;
-
 			events.push(touch);
-			if (eventName !== 'touchend') touches.push(touch);
 		});
 
-		// Loop through the touches array and fill in their targetTouches arrays.
-		events.forEach(function(first) {
-			events.forEach(function(second) {
-				if (first.fingerTarget === second.fingerTarget) {
-					first.targetTouches.push(second);
-				}
+		// Loop through the events array and fill in each touch array.
+		events.forEach(function(touch) {
+			touch.touches = events.filter(function(e) {
+				return e.type !== 'touchend';
+			});
+
+			touch.changedTouches = events.filter(function(e) {
+				return e._fingerTarget === touch._fingerTarget;
+			});
+
+			touch.targetTouches = touch.changedTouches.filter(function(e) {
+				return e.type !== 'touchend';
 			});
 		});
 
 		// Then fire the events.
 		events.forEach(function(event) {
-			event.fingerTarget.dispatchEvent(event);
+			event._fingerTarget.dispatchEvent(event);
 		});
 	}
-	
+
 	// Prevent all mousedown event from doing anything.
 	// We'll fire one manually at touchend.
 	function phantomTouchStart(e) {
