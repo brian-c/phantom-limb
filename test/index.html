@@ -34,14 +34,18 @@
 					.surface.active {
 						background: #cfc;
 					}
+
+					.surface > * {
+						pointer-events: none;
+					}
 		</style>
 	</head>
 
 	<body>
-		<div id="top-left" class="surface"></div>
-		<div id="top-right" class="surface"></div>
-		<div id="bottom-left" class="surface"></div>
-		<div id="bottom-right" class="surface"></div>
+		<div id="top-left" class="touch surface">Touch</div>
+		<div id="top-right" class="touch surface">Touch</div>
+		<div id="bottom-left" class="gesture surface">Gesture</div>
+		<div id="bottom-right" class="gesture surface">Gesture</div>
 
 		<script src="Surface.js" type="text/javascript"></script>
 

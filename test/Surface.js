@@ -30,14 +30,16 @@
 		active: false,
 
 		init: function() {
-			if (true || touch) {
+			if (this.element.classList.contains('touch')) {
 				this.element.addEventListener('touchstart', bind(this._onContact, this), false);
 				this.element.addEventListener('touchmove', bind(this._onMove, this), false);
 				this.element.addEventListener('touchend', bind(this._onDocRelease, this), false);
-			} else {
-				this.element.addEventListener('mousedown', bind(this._onContact, this), false);
-				this.element.addEventListener('mousemove', bind(this._onMove, this), false);
-				document.addEventListener('mouseup', bind(this._onDocRelease, this), false);
+			}
+
+			if (this.element.classList.contains('gesture')) {
+				this.element.addEventListener('gesturestart', bind(this._onContact, this), false);
+				this.element.addEventListener('gesturechange', bind(this._onMove, this), false);
+				this.element.addEventListener('gestureend', bind(this._onDocRelease, this), false);
 			}
 		},
 
@@ -52,7 +54,6 @@
 		},
 
 		_onContact: function(e) {
-			// e.preventDefault();
 			this.activate();
 			this.onContact(e);
 		},
@@ -103,18 +104,20 @@
 					this.log(i, e.touches[i].target.id, e.targetTouches[i].clientX, e.targetTouches[i].clientY);
 				}
 
-				if (e.targetTouches.length === 2) {
+				if (~e.type.indexOf('gesture') || e.targetTouches.length === 2) {
 					this.log('scale', e.scale);
 					this.log('rotation', e.rotation);
 				}
 			} else {
-				this.log('clientX', e.clientX);
-				this.log('clientY', e.clientY);
+				this.log('pageX', e.pageX);
+				this.log('pageY', e.pageY);
 			}
+
+			this.log.apply(this, Object.keys(e));
 		},
 
-		log: function(string) {
-			var message = document.createElement('p');
+		log: function() {
+			var message = document.createElement('div');
 			message.innerHTML = Array.prototype.join.call(arguments, ' | ');
 			message.id = 'div-' + Math.floor(Math.random() * 1000000);
 			this.element.appendChild(message);
