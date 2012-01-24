@@ -104,7 +104,7 @@
 					this.log(i, e.touches[i].target.id, e.targetTouches[i].clientX, e.targetTouches[i].clientY);
 				}
 
-				if (~e.type.indexOf('gesture') || e.targetTouches.length === 2) {
+				if (~e.type.indexOf('gesture') || e.touches.length === 2) {
 					this.log('scale', e.scale);
 					this.log('rotation', e.rotation);
 				}

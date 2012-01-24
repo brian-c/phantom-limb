@@ -138,6 +138,9 @@
 		return e;
 	}
 
+	var startDistance = NaN;
+	var startAngle = NaN;
+
 	// Given a mouse event, fire a touch event for each finger.
 	// Add the appropriate touch-specific event properties.
 	function fireTouchEvents(eventName, originalEvent) {
@@ -177,6 +180,26 @@
 
 			events.push(touch);
 		});
+
+		// Figure out scale and rotation.
+		// TODO: Gesture support.
+		if (events.length > 1) {
+			var x = events[0].pageX - events[1].pageX;
+			var y = events[0].pageY - events[1].pageY;
+
+			var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+			var angle = Math.atan2(x, y) * (180 / Math.PI);
+
+			if (eventName === 'touchstart') {
+				startDistance = distance;
+				startAngle = angle;
+			}
+
+			events.forEach(function(event) {
+				event.scale = distance / startDistance;
+				event.rotation = startAngle - angle;
+			});
+		}
 
 		// Loop through the events array and fill in each touch array.
 		events.forEach(function(touch) {
