@@ -135,6 +135,9 @@
 
 		e.synthetic = true;
 
+		// Set this so we can match shared targets later.
+		e._finger = finger;
+
 		return e;
 	}
 
@@ -146,6 +149,7 @@
 	function fireTouchEvents(eventName, originalEvent) {
 		// All touch events, including "touchend".
 		var events = [];
+		var gestures = [];
 
 		// For each finger with a target, create a touch event.
 		fingers.forEach(function(finger) {
@@ -170,19 +174,12 @@
 			// Set up a new event with the coordinates of the finger.
 			var touch = createMouseEvent(eventName, originalEvent, finger);
 
-			// Set this so we can match shared targets later.
-			touch._fingerTarget = finger.target;
-
-			// These will be filled in once all touch events are created.
-			touch.touches = [];
-			touch.changedTouches = [];
-			touch.targetTouches = [];
-
 			events.push(touch);
 		});
 
+
+
 		// Figure out scale and rotation.
-		// TODO: Gesture support.
 		if (events.length > 1) {
 			var x = events[0].pageX - events[1].pageX;
 			var y = events[0].pageY - events[1].pageY;
@@ -190,12 +187,22 @@
 			var distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
 			var angle = Math.atan2(x, y) * (180 / Math.PI);
 
+			var gestureName = 'gesturechange';
+
 			if (eventName === 'touchstart') {
+				gestureName = 'gesturestart';
 				startDistance = distance;
 				startAngle = angle;
 			}
 
+			if (eventName === 'touchend') gestureName = 'gestureend';
+
 			events.forEach(function(event) {
+				var gesture = createMouseEvent(gestureName, event, event._finger);
+				gestures.push(gesture);
+			});
+
+			events.concat(gestures).forEach(function(event) {
 				event.scale = distance / startDistance;
 				event.rotation = startAngle - angle;
 			});
@@ -204,21 +211,21 @@
 		// Loop through the events array and fill in each touch array.
 		events.forEach(function(touch) {
 			touch.touches = events.filter(function(e) {
-				return e.type !== 'touchend';
+				return ~e.type.indexOf('touch') && e.type !== 'touchend';
 			});
 
 			touch.changedTouches = events.filter(function(e) {
-				return e._fingerTarget === touch._fingerTarget;
+				return ~e.type.indexOf('touch') && e._finger.target === touch._finger.target;
 			});
 
 			touch.targetTouches = touch.changedTouches.filter(function(e) {
-				return e.type !== 'touchend';
+				return ~e.type.indexOf('touch') && e.type !== 'touchend';
 			});
 		});
 
 		// Then fire the events.
-		events.forEach(function(event) {
-			event._fingerTarget.dispatchEvent(event);
+		events.concat(gestures).forEach(function(event) {
+			event._finger.target.dispatchEvent(event);
 		});
 	}
 

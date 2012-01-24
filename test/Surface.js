@@ -74,7 +74,7 @@
 			}
 
 			if (!stillActive) {
-				this.deactivate();	
+				this.deactivate();
 				this.onRelease(e);
 			}
 		},
@@ -99,18 +99,13 @@
 			this.log('targetTouches', e.targetTouches ? e.targetTouches.length : 'n/a');
 			this.log('changedTouches', e.changedTouches ? e.changedTouches.length : 'n/a');
 
-			if (e.touches) {
-				for (var i = 0; i < e.targetTouches.length; i++) {
-					this.log(i, e.touches[i].target.id, e.targetTouches[i].clientX, e.targetTouches[i].clientY);
-				}
+			if (e.targetTouches) for (var i = 0; i < e.targetTouches.length; i++) {
+				this.log(i, e.touches[i].target.id, e.targetTouches[i].pageX, e.targetTouches[i].pageY);
+			}
 
-				if (~e.type.indexOf('gesture') || e.touches.length === 2) {
-					this.log('scale', e.scale);
-					this.log('rotation', e.rotation);
-				}
-			} else {
-				this.log('pageX', e.pageX);
-				this.log('pageY', e.pageY);
+			if (~e.type.indexOf('gesture') || e.touches.length === 2) {
+				this.log('scale', e.scale);
+				this.log('rotation', e.rotation);
 			}
 
 			this.log.apply(this, Object.keys(e));
