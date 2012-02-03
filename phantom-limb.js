@@ -5,14 +5,10 @@
 
 	"use strict";
 
-	if (!!~navigator.userAgent.indexOf('iP')) return;
-
 	var config = mixin({
 		debug: false,
 		css: true
-	}, GLOBAL.phantomLimb || {});
-
-	if (GLOBAL.phantomLimb) GLOBAL.phantomLimb = config;
+	}, GLOBAL.phantomLimbConfig || {});
 
 	function log() {
 		if (config.debug) console.log.apply(console, arguments);
@@ -166,7 +162,7 @@
 
 			if (finger.target.hasAttribute(onEventName)) {
 				console.warn('Converting `' + onEventName + '` attribute to event listener.', finger.target);
-				var handler = new Function('event', finger.target.getAttribute(onEventName));
+				var handler = new GLOBAL.Function('event', finger.target.getAttribute(onEventName));
 				listen(finger.target, eventName, handler);
 				finger.target.removeAttribute(onEventName);
 			}
@@ -335,12 +331,35 @@
 		e.stopPropagation();
 	}
 
-	// TODO: Make these toggleable?
-	capture(document, 'mousedown', phantomTouchStart);
-	capture(document, 'mousemove', phantomTouchMove);
-	capture(document, 'mouseup', phantomTouchEnd);
-	capture(document, 'click', phantomClick);
+	function start() {
+		capture(document, 'mousedown', phantomTouchStart);
+		capture(document, 'mousemove', phantomTouchMove);
+		capture(document, 'mouseup', phantomTouchEnd);
+		capture(document, 'click', phantomClick);
 
-	// Finally, we'll add a class to the root element.
-	document.documentElement.classList.add('_phantom-limb');
+		document.documentElement.classList.add('_phantom-limb');
+	}
+
+	function stop() {
+		document.removeEventListener('mousedown', phantomTouchStart, true);
+		document.removeEventListener('mousemove', phantomTouchMove, true);
+		document.removeEventListener('mouseup', phantomTouchEnd, true);
+		document.removeEventListener('click', phantomClick, true);
+
+		document.documentElement.classList.remove('_phantom-limb');
+	}
+
+	// Make it available. TODO: Test these. I'm really just guessing.
+	var phantomLimb = {start: start, stop: stop};
+
+	if (typeof GLOBAL.define === 'function') {
+		GLOBAL.define(phantomLimb);
+	} else if (typeof GLOBAL.exports !== 'undefined') {
+		GLOBAL.exports = phantomLimb;
+	} else {
+		GLOBAL.phantomLimb = phantomLimb;
+	}
+
+	// Start on load, I guess? For now at least.
+	start();
 }(this));
