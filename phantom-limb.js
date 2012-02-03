@@ -5,49 +5,13 @@
 
 	"use strict";
 
-	var config = mixin({
-		debug: false,
-		css: true
-	}, GLOBAL.phantomLimbConfig || {});
+	var config = {
+		css: true,
+		startOnLoad: true
+	};
 
-	function log() {
-		if (config.debug) console.log.apply(console, arguments);
-	}
-
-	function mixin(base, over) {
-		for (var propertyName in over) {
-			if (!over.hasOwnProperty(propertyName)) continue;
-			base[propertyName] = over[propertyName];
-		}
-
-		return base;
-	}
-
-	function bind(fn, context) {
-		function boundFn() {
-			fn.apply(context, arguments);
-		}
-
-		return boundFn;
-	}
-
-	function listen(target, eventName, context, handler, _capture) {
-		if (typeof context === 'function') {
-			_capture = handler;
-			handler = context;
-			context = target;
-		}
-
-		if (typeof handler === 'string') {
-			handler = bind(context[handler], context);
-		}
-
-		target.addEventListener(eventName, handler, _capture);
-	}
-
-	function capture(target, eventName, context, handler) {
-		var args = Array.prototype.slice.call(arguments).concat([true]);
-		listen.apply(null, args);
+	for (var param in GLOBAL.phantomLimbConfig) {
+		config[param] = GLOBAL.phantomLimbConfig[param];
 	}
 
 	// Keep track of whether the mouse is down.
@@ -55,19 +19,12 @@
 
 	// A Finger is a representation on the screen.
 	// It keeps track of its position and the node that it's over.
-	function Finger(options) {
-		mixin(this, options);
-
+	function Finger() {
 		this.node = document.createElement('span');
 		this.node.classList.add('_phantom-limb_finger');
 
 		// Add a node per finger.
-		// Probably not the most efficient way to do this.
-		if (document.readyState === 'complete') {
-			document.body.appendChild(this.node);
-		} else {
-			listen(window, 'load', this, 'place');
-		}
+		document.body.appendChild(this.node);
 	}
 
 	Finger.prototype = {
@@ -93,9 +50,7 @@
 		move: function(x, y) {
 			if (isNaN(x) || isNaN(y)) {
 				this.hide();
-
 				this.target = null;
-				this.startTarget = null;
 			} else {
 				this.show();
 
@@ -111,22 +66,19 @@
 	};
 
 	// Here we'll instantiate the fingers we'll use in the rest of the script.
-	var fingers = [
-		new Finger(),
-		new Finger()
-	];
+	var fingers = [new Finger(), new Finger()];
 
 	// Create a synthetic event from a real event and a finger.
-	function createMouseEvent(eventName, original, finger) {
+	function createMouseEvent(eventName, originalEvent, finger) {
 		var e = document.createEvent('MouseEvent');
 
 		e.initMouseEvent(eventName, true, true,
-			original.view, original.detail,
-			finger.x || original.screenX, finger.y || original.screenY,
-			finger.x || original.clientX, finger.y || original.clientY,
-			original.ctrlKey, original.shiftKey,
-			original.altKey, original.metaKey,
-			original.button, finger.target || original.relatedTarget
+			originalEvent.view, originalEvent.detail,
+			finger.x || originalEvent.screenX, finger.y || originalEvent.screenY,
+			finger.x || originalEvent.clientX, finger.y || originalEvent.clientY,
+			originalEvent.ctrlKey, originalEvent.shiftKey,
+			originalEvent.altKey, originalEvent.metaKey,
+			originalEvent.button, finger.target || originalEvent.relatedTarget
 		);
 
 		e.synthetic = true;
@@ -156,14 +108,14 @@
 
 			if (onEventName in finger.target) {
 				console.warn('Converting `' + onEventName + '` property to event listener.', finger.target);
-				listen(finger.target, eventName, finger.target[onEventName]);
+				finger.target.addEventListener(eventName, finger.target[onEventName], false);
 				delete finger.target[onEventName];
 			}
 
 			if (finger.target.hasAttribute(onEventName)) {
 				console.warn('Converting `' + onEventName + '` attribute to event listener.', finger.target);
 				var handler = new GLOBAL.Function('event', finger.target.getAttribute(onEventName));
-				listen(finger.target, eventName, handler);
+				finger.target.addEventListener(eventName, handler, false);
 				finger.target.removeAttribute(onEventName);
 			}
 
@@ -172,8 +124,6 @@
 
 			events.push(touch);
 		});
-
-
 
 		// Figure out scale and rotation.
 		if (events.length > 1) {
@@ -332,10 +282,10 @@
 	}
 
 	function start() {
-		capture(document, 'mousedown', phantomTouchStart);
-		capture(document, 'mousemove', phantomTouchMove);
-		capture(document, 'mouseup', phantomTouchEnd);
-		capture(document, 'click', phantomClick);
+		document.addEventListener('mousedown', phantomTouchStart, true);
+		document.addEventListener('mousemove', phantomTouchMove, true);
+		document.addEventListener('mouseup', phantomTouchEnd, true);
+		document.addEventListener('click', phantomClick, true);
 
 		document.documentElement.classList.add('_phantom-limb');
 	}
@@ -349,9 +299,12 @@
 		document.documentElement.classList.remove('_phantom-limb');
 	}
 
-	// Make it available. TODO: Test these. I'm really just guessing.
-	var phantomLimb = {start: start, stop: stop};
+	var phantomLimb = {
+		start: start,
+		stop: stop
+	};
 
+	// TODO: Test these. I'm really just guessing.
 	if (typeof GLOBAL.define === 'function') {
 		GLOBAL.define(phantomLimb);
 	} else if (typeof GLOBAL.exports !== 'undefined') {
@@ -360,6 +313,5 @@
 		GLOBAL.phantomLimb = phantomLimb;
 	}
 
-	// Start on load, I guess? For now at least.
-	start();
+	if (config.startOnLoad) start();
 }(this));
