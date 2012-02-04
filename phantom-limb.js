@@ -170,7 +170,8 @@
 		});
 
 		// Then fire the events.
-		events.concat(gestures).forEach(function(event) {
+		events.concat(gestures).forEach(function(event, i) {
+			event.identifier = i;
 			event._finger.target.dispatchEvent(event);
 		});
 	}
