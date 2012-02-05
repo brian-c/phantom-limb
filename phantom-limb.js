@@ -306,6 +306,7 @@
 			'pointer-events: none;',
 			'position: fixed;',
 			'width: 44px;',
+			'z-index: 999999' +
 		'}',
 		'._phantom-limb ._phantom-limb_finger {',
 			'display: block;',
