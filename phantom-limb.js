@@ -1,15 +1,19 @@
 (function(GLOBAL) {
 	// Phantom Limb
+	// ------------
 	// http://viewinglens.com/phantom-limb
-	// Brian Carstensen <brian.carstensen@gmail.com>
+	// https://github.com/brian-c/phantom-limb
+	// brian.carstensen@gmail.com
 
 	"use strict";
 
+	// Default configuration
 	var config = {
-		css: true,
+		style: true,
 		startOnLoad: true
 	};
 
+	// Apply overrides
 	for (var param in GLOBAL.phantomLimbConfig) {
 		config[param] = GLOBAL.phantomLimbConfig[param];
 	}
@@ -65,8 +69,11 @@
 		}
 	};
 
-	// Here we'll instantiate the fingers we'll use in the rest of the script.
-	var fingers = [new Finger(), new Finger()];
+	// Instantiate the fingers we'll use in the rest of the script.
+	var fingers = [
+		new Finger(),
+		new Finger()
+	];
 
 	// Create a synthetic event from a real event and a finger.
 	function createMouseEvent(eventName, originalEvent, finger) {
@@ -282,6 +289,35 @@
 		e.stopPropagation();
 	}
 
+	// Not entirely proud of this, but I can't serve CSS from GitHub
+	// and I want the bookmarklet to be as simple as possible.
+	var defaultCSS = ([
+		'._phantom-limb,',
+		'._phantom-limb a {',
+			'cursor: none !important;',
+		'}',
+		'._phantom-limb_finger {',
+			'background: rgba(128, 128, 128, 0.5);',
+			'border: 2px solid rgb(128, 128, 128);',
+			'border-radius: 50%;',
+			'display: none;',
+			'height: 44px;',
+			'margin: -22px 0 0 -22px;',
+			'pointer-events: none;',
+			'position: fixed;',
+			'width: 44px;',
+		'}',
+		'._phantom-limb ._phantom-limb_finger {',
+			'display: block;',
+		'}'
+	]).join('\n');
+
+	var styleTag = document.createElement('style');
+	styleTag.id = '_phantom-limb_default-style';
+	styleTag.innerHTML = defaultCSS;
+	if (config.style) document.querySelector('head').appendChild(styleTag);
+
+	// On/off switch
 	function start() {
 		document.addEventListener('mousedown', phantomTouchStart, true);
 		document.addEventListener('mousemove', phantomTouchMove, true);
