@@ -205,11 +205,11 @@
 	// Pressing shift locks the second finger's position relative to the first's.
 	function moveFingers(e) {
 		// We'll use this if the second is locked with the first.
-		var changeX = e.pageX - fingers[0].x || 0;
-		var changeY = e.pageY - fingers[0].y || 0;
+		var changeX = e.clientX - fingers[0].x || 0;
+		var changeY = e.clientY - fingers[0].y || 0;
 
 		// The first finger just follows the mouse.
-		fingers[0].move(e.pageX, e.pageY);
+		fingers[0].move(e.clientX, e.clientY);
 
 		// TODO: Determine modifier keys independent of mouse movement.
 
@@ -226,8 +226,8 @@
 				centerY += changeY;
 			}
 
-			var secondX = centerX + (centerX - e.pageX);
-			var secondY = centerY + (centerY - e.pageY);
+			var secondX = centerX + (centerX - e.clientX);
+			var secondY = centerY + (centerY - e.clientY);
 
 			fingers[1].move(secondX, secondY);
 		} else {
