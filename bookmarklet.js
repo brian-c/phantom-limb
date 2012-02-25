@@ -3,4 +3,4 @@ javascript:void(function(commit) {
 	scriptTag.type = 'text/javascript';
 	scriptTag.src = 'https://raw.github.com/brian-c/phantom-limb/' + commit + '/phantom-limb.js';
 	document.body.appendChild(scriptTag);
-}('rewrite'));
+}('v2.0.1'));
