@@ -11,4 +11,4 @@ javascript: void(function(scriptSrc, imgSrc) {
 	}, false);
 	
 	document.getElementsByTagName('head')[0].appendChild(script);
-}('http://dl.dropbox.com/u/557187/phantom-limb/phantomLimb.js', 'http://dl.dropbox.com/u/557187/phantom-limb/limb-black.png'));
+}('https://raw.github.com/brian-c/phantom-limb/v1.0.0/phantomLimb.js', 'https://raw.github.com/brian-c/phantom-limb/v1.0.0/limb-black.png'));
