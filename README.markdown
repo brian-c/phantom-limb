@@ -1,3 +1,12 @@
+PLEASE NOTE
+===========
+
+This is the 1.0 line oh Phantom Limb. It was recently rewritten to much more closely simulate a mobile browser's behavior, including multi-touch support. Unfortunately in the proccess it lost its big weird hand. My apologies.
+
+I recommend keeping up with the latest release, and maybe one day I'll get a few minutes to add the big weird hand back in.
+
+https://github.com/brian-c/phantom-limb
+
 Phantom Limb
 ============
 
@@ -21,7 +30,7 @@ And if those events don't change the DOM, the browser finally fires:
 
 1. `mousedown`
 2. `mouseup`
-3 `click`
+3. `click`
 
 This behavior is a convenience for the user to ensure that pages that utilize mouse events will generally be somewhat functional in a mouse-less environment, but you're going to have much more control and create a better experience in your mobile webapp by using native touch events. Generally not a problem, except desktop browsers don't do anything with touch events, so you'll have to do all your testing on the device itself (or the iOS Simulator app included with the iOS SDK), without the benefit of a decent debugger or comfortable posture.
 
@@ -38,11 +47,8 @@ It replaces your mouse cursor with a creepy disembodied hand
 
 I added this pretty much for my own amusement, and you can shut it off with the button in the bottom right corner. But it can serve a purpose while you're designing and testing a mobile webapp. Fingers are kinda stubby, for one, and tend to be much less accurate than a mouse cursor. By hiding the cursor and providing a sorta-inaccurate faux-finger to faux-poke the screen with, you'll get a better sense of how easy it'll be to poke the right element on a real mobile device. Also, your hand is opaque (I hope) and usually covers up some portion of the screen on a mobile device. By blocking part of the screen, you'll be able to make sure the user will see everything they need to as they're interacting with your app.
 
-[Here's a basic test page](http://dl.dropbox.com/u/557187/phantom-limb/index.html).
-
-And [here it is in action](http://dl.dropbox.com/u/557187/metronome/index.html), applied to my on-again-off-again metronome iPad webapp. Run it in Safari to get the full effect.
-
 Phantom Limb can be activated from this bookmarklet:
-javascript:void(function(scriptSrc,imgSrc){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init({src:imgSrc});}else{console.error('Phantom Limb could not be loaded');}},false);document.getElementsByTagName('head')[0].appendChild(script);}('http://dl.dropbox.com/u/557187/phantom-limb/phantomLimb.js','http://dl.dropbox.com/u/557187/phantom-limb/limb-black.png'));
+
+`javascript:void(function(scriptSrc,imgSrc){var script=document.createElement('script');script.src=scriptSrc;script.type='text/javascript';script.addEventListener('load',function(){if('phantomLimb'in window){phantomLimb.init({src:imgSrc});}else{console.error('Phantom Limb could not be loaded');}},false);document.getElementsByTagName('head')[0].appendChild(script);}('https://raw.github.com/brian-c/phantom-limb/v1.0.0/phantomLimb.js','https://raw.github.com/brian-c/phantom-limb/v1.0.0/limb-black.png'));`
 
 If you want to include it in your project, the latest source can be found on [GitHub](https://github.com/brian-c/phantom-limb).
