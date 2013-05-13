@@ -289,6 +289,11 @@
 		e.stopPropagation();
 	}
 
+	// Detect keyup, exit when esc.
+	function phantomKeyUp(e) {
+		if (e.keyCode == 27) stop();
+	}
+
 	// Not entirely proud of this, but I can't serve CSS from GitHub
 	// and I want the bookmarklet to be as simple as possible.
 	var defaultCSS = ([
@@ -324,6 +329,7 @@
 		document.addEventListener('mousemove', phantomTouchMove, true);
 		document.addEventListener('mouseup', phantomTouchEnd, true);
 		document.addEventListener('click', phantomClick, true);
+		document.addEventListener('keyup', phantomKeyUp, true);
 
 		document.documentElement.classList.add('_phantom-limb');
 	}
@@ -333,6 +339,7 @@
 		document.removeEventListener('mousemove', phantomTouchMove, true);
 		document.removeEventListener('mouseup', phantomTouchEnd, true);
 		document.removeEventListener('click', phantomClick, true);
+		document.removeEventListener('keyup', phantomKeyUp, true);
 
 		document.documentElement.classList.remove('_phantom-limb');
 	}
