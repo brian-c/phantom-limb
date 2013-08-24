@@ -69,8 +69,8 @@
 		}
 	};
 
-	// Instantiate the fingers we'll use in the rest of the script.
-	var fingers = null;
+	// We'll instantiate the fingers when we start.
+	var fingers = [];
 
 	// Create a synthetic event from a real event and a finger.
 	function createMouseEvent(eventName, originalEvent, finger) {
@@ -322,12 +322,8 @@
 
 	// On/off switch
 	function start() {
-		if( fingers == null){
-		  fingers = [
-		    new Finger(),
-		    new Finger()
-		  ];
-		}
+		if (fingers.length === 0) fingers.push(new Finger(), new Finger());
+
 		document.addEventListener('mousedown', phantomTouchStart, true);
 		document.addEventListener('mousemove', phantomTouchMove, true);
 		document.addEventListener('mouseup', phantomTouchEnd, true);
