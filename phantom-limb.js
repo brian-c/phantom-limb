@@ -361,5 +361,5 @@
 		GLOBAL.phantomLimb = phantomLimb;
 	}
 
-	if (config.startOnLoad) setTimeout(start,2000);
+	if (config.startOnLoad) window.addEventListener('DOMContentLoaded', start, false);
 }(this));
