@@ -1,4 +1,4 @@
-(function(GLOBAL) {
+(function() {
 	// Phantom Limb
 	// ------------
 	// http://viewinglens.com/phantom-limb
@@ -14,8 +14,8 @@
 	};
 
 	// Apply overrides
-	for (var param in GLOBAL.phantomLimbConfig) {
-		config[param] = GLOBAL.phantomLimbConfig[param];
+	for (var param in window.phantomLimbConfig) {
+		config[param] = window.phantomLimbConfig[param];
 	}
 
 	// Keep track of whether the mouse is down.
@@ -26,9 +26,7 @@
 	function Finger() {
 		this.node = document.createElement('span');
 		this.node.classList.add('_phantom-limb_finger');
-
-		// Add a node per finger.
-		document.body.appendChild(this.node);
+		this.place();
 	}
 
 	Finger.prototype = {
@@ -118,7 +116,7 @@
 
 			if (finger.target.hasAttribute(onEventName)) {
 				console.warn('Converting `' + onEventName + '` attribute to event listener.', finger.target);
-				var handler = new GLOBAL.Function('event', finger.target.getAttribute(onEventName));
+				var handler = new Function('event', finger.target.getAttribute(onEventName));
 				finger.target.addEventListener(eventName, handler, false);
 				finger.target.removeAttribute(onEventName);
 			}
@@ -213,8 +211,8 @@
 		if (e.altKey) {
 			// Reset the center.
 			if (!centerX && !centerY) {
-				centerX = window.innerWidth / 2;
-				centerY = window.innerHeight / 2;
+				centerX = innerWidth / 2;
+				centerY = innerHeight / 2;
 			}
 
 			// Lock the center with the first finger.
@@ -352,16 +350,11 @@
 		stop: stop
 	};
 
-	// TODO: Test these. I'm really just guessing.
-	if (typeof GLOBAL.define === 'function') {
-		GLOBAL.define(phantomLimb);
-	} else if (typeof GLOBAL.exports !== 'undefined') {
-		GLOBAL.exports = phantomLimb;
-	} else {
-		GLOBAL.phantomLimb = phantomLimb;
-	}
+	if (typeof define === 'function' && define.amd) define(phantomLimb);
+	if (typeof module !== 'undefined') module.exports = phantomLimb;
+	window.phantomLimb = phantomLimb;
 
 	document.addEventListener('keyup', phantomKeyUp, false);
 
-	if (config.startOnLoad) window.addEventListener('DOMContentLoaded', start, false);
-}(this));
+	if (config.startOnLoad) addEventListener('DOMContentLoaded', start, false);
+}());
