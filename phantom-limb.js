@@ -308,10 +308,12 @@
 		'}'
 	]).join('\n');
 
-	var styleTag = document.createElement('style');
-	styleTag.id = '_phantom-limb_default-style';
-	styleTag.innerHTML = defaultCSS;
-	if (config.style) document.querySelector('head').appendChild(styleTag);
+	if (config.style) {
+		var styleTag = document.createElement('style');
+		styleTag.id = '_phantom-limb_default-style';
+		styleTag.innerHTML = defaultCSS;
+		document.querySelector('head').appendChild(styleTag);
+	}
 
 	// On/off switch
 	function start() {
