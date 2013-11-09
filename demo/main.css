@@ -1,0 +1,95 @@
+html {
+	background: #409;
+	color: #ff0;
+	font: 14px/1.5 "Helvetica Heue", Arial, sans-serif;
+}
+
+body {
+	margin: 0;
+}
+
+#main {
+	margin: 3em auto 5em;
+	width: 426px;
+}
+
+hgroup {
+	font-weight: bold;
+}
+
+h1 {
+	font: 72px/0.9 "Arial Black", sans-serif;
+	margin: 0 0 0.125em -2px;
+	text-shadow:
+		0 1px rgba(255, 255, 0, 0.25),
+		0 2px rgba(255, 255, 0, 0.25),
+		0 3px rgba(255, 255, 0, 0.25),
+		0 4px rgba(255, 255, 0, 0.25),
+		0 5px 10px rgba(0, 0, 0, 0.75);
+	text-transform: uppercase;
+}
+
+h2 {
+	font: 24px "Arial Black", sans-serif;
+	margin: 2em 0 0 0;
+	text-shadow: 0 2px 2px rgba(0, 0, 0, 0.5);
+}
+
+p.sub {
+	margin-left: 3em;
+}
+
+.faux-device {
+	background: #222;
+	background: -moz-linear-gradient(-80deg, #333 32%, #000 34%, #222 67%);
+	background: -webkit-linear-gradient(-80deg, #333 32%, #000 34%, #222 67%);
+	border: 2px solid rgba(255, 255, 255, 0.25);
+	border-radius: 33px;
+	box-shadow:
+		0 0 10px #111 inset,
+		0 3px 10px rgba(0, 0, 0, 0.5);
+	margin: 2em auto;
+	padding: 50px;
+	text-align: center;
+	width: 320px;
+}
+
+.faux-device iframe {
+	border: 1px solid #666;
+	box-shadow:
+		-2px -2px 2px #222,
+		2px 2px 2px #444;
+}
+
+
+a.bookmarklet {
+	background: rgba(255, 255, 255, 0.75);
+	border: 0;
+	border-radius: 5px;
+	box-shadow:
+		0 1px rgba(255, 255, 255, 0.25),
+		0 2px rgba(255, 255, 255, 0.25),
+		0 3px 3px #000;
+	color: #000;
+	cursor: -moz-grab;
+	cursor: -webkit-grab;
+	display: inline-block;
+	font-weight: bold;
+	padding: 0.25em 1.25em;
+	text-shadow: 0 1px 1px #fff;
+}
+
+a.bookmarklet:active {
+	cursor: -moz-grabbing;
+	cursor: -webkit-grabbing;
+}
+
+a {
+	border-bottom: 1px solid fadeout(#fff, 75%);
+	color: #fff;
+	text-decoration: none;
+}
+
+a:hover {
+	border-bottom-color: fadeout(#fff, 50%);
+}
