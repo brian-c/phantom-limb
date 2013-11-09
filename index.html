@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<title>Phantom Limb fires touch events in desktop browsers</title>
+
+		<style type="text/less">
+			html {
+				background: #409;
+				color: #ff0;
+				font: 14px/1.5 "Helvetica Heue", Arial, sans-serif;
+
+				body {
+					margin: 0;
+
+					#main {
+						margin: 3em auto 5em;
+						width: 426px;
+
+						hgroup {
+							font-weight: bold;
+
+							h1 {
+								font: 72px/0.9 "Arial Black", sans-serif;
+								margin: 0 0 0.125em -2px;
+								text-shadow:
+									0 1px fadeout(#ff0, 80%),
+									0 2px fadeout(#ff0, 80%),
+									0 3px fadeout(#ff0, 80%),
+									0 4px fadeout(#ff0, 80%),
+									0 5px 10px fadeout(#000, 25%);
+								text-transform: uppercase;
+							}
+						}
+
+						h2 {
+							font: 24px "Arial Black", sans-serif;
+							margin: 2em 0 0 0;
+							text-shadow: 0 2px 2px fadeout(#000, 50%);
+						}
+
+						p {}
+
+						p.sub {
+							margin-left: 3em;
+						}
+
+						.faux-device {
+							background: #222;
+							background: -moz-linear-gradient(-80deg, #333 32%, #000 34%, #222 67%);
+							background: -webkit-linear-gradient(-80deg, #333 32%, #000 34%, #222 67%);
+							border: 2px solid fadeout(#fff, 80%);
+							border-radius: 33px;
+							box-shadow:
+								0 0 10px #111 inset,
+								0 3px 10px fadeout(#000, 50%);
+							margin: 2em auto;
+							padding: 50px;
+							text-align: center;
+							width: 320px;
+
+							iframe {
+								border: 1px solid #666;
+								box-shadow:
+									-2px -2px 2px #222,
+									2px 2px 2px #444;
+							}
+						}
+
+						a.bookmarklet {
+							background: fadeout(#fff, 25%);
+							border: 0;
+							border-radius: 5px;
+							box-shadow:
+								0 1px fadeout(#fff, 75%),
+								0 2px fadeout(#fff, 75%),
+								0 3px 3px #000;
+							color: #000;
+							cursor: -moz-grab;
+							cursor: -webkit-grab;
+							display: inline-block;
+							font-weight: bold;
+							padding: 0.25em 1.25em;
+							text-shadow: 0 1px 1px #fff;
+						}
+
+						a.bookmarklet:active {
+							cursor: -moz-grabbing;
+							cursor: -webkit-grabbing;
+						}
+					}
+				}
+
+				a {
+					border-bottom: 1px solid fadeout(#fff, 75%);
+					color: #fff;
+					text-decoration: none;
+				}
+
+				a:hover {
+					border-bottom-color: fadeout(#fff, 50%);
+				}
+			}
+		</style>
+
+		<script src="http://lesscss.googlecode.com/files/less-1.1.3.min.js" type="text/javascript"></script>
+	</head>
+
+	<body>
+		<div id="main">
+			<hgroup>
+				<h1>Phantom Limb</h1>
+				<p>Brian Carstensen &nbsp; <a href="http://viewinglens.com/">http://viewinglens.com/</a></p>
+			</hgroup>
+
+			<h2>What’s it?</h2>
+
+			<p>So, you know when you’re hackin’ away on that mobile web<!-- SPACE OR NOT I CAN’T DECIDE AHHH -->app of yours, and you need to debug something, but mobile Safari’s debug console is kinda worthless so you just end up doing a bunch of alerts like it’s 1997? Wouldn’t it be cool if you could run your app in all-grown-up Safari on your desktop?</p>
+
+			<p>That’s pretty much what this thing helps you do. Phantom Limb makes your mouse-clicker fire simulated <code>touchstart</code>, <code>touchmove</code>, and <code>touchend</code> events, just like there was no mouse at all and you were pokin’ at the screen like some kinda idiot.</p>
+
+			<h2>Try it</h2>
+
+			<p>Make-believe the big box that follows is an iPhone or Android or something, and the creepy little hand is your own creepy little hand, and play the mighty metronome the way God intended it.</p>
+
+			<p>If you're lucky, it might even make noise. Browsers' audio support is crazy buggy. I'll get a better demo up later.<p>
+
+			<div class="faux-device">
+				<iframe src="../metronome/" width="320" height="480"></iframe><br />
+			</div>
+
+			<p>Look, now you’re an attractive musician!</p>
+
+			<h2>Use it</h2>
+
+			<p>You can stick this script on your page...</p>
+
+			<p class="sub">
+				<code>&lt;script src="https://github.com/brian-c/phantom-limb/raw/master/phantomLimb.js"&gt;&lt;/script&gt;</code>
+			</p>
+
+			<p>...and on your DOM-loaded event of choice call...</p>
+
+			<p class="sub">
+				<code>phantomLimb.init({src: 'https://github.com/brian-c/phantom-limb/raw/master/limb-black.png', lefty: false});</code>
+			</p>
+
+			<p>Or you can use this bookmarklet to call it on <em>any</em> page:</p>
+
+			<p class="sub"><a href="javascript:void(function(commit){var scriptTag=document.createElement('script');scriptTag.type='text/javascript';scriptTag.src='https://raw.github.com/brian-c/phantom-limb/'+commit+'/phantom-limb.js';document.body.appendChild(scriptTag);}('v2.0.1'));" class="bookmarklet">Phantom Limb</a></p>
+			<p>Or you can <a href="https://github.com/brian-c/phantom-limb">grab the source</a> and have your way with it.</p>
+
+			<h2>&amp;c.</h2>
+
+			<p>Improvements, bug reports, etc. are all very appreciated. I’m aware of a couple issues that need attention. You’ve no doubt found several more in the 114 seconds you played with it.</p>
+
+			<p><a href="https://github.com/brian-c/phantom-limb">The thing’s on the ol’ GitHub.</a></p>
+
+			<p>You can email me at <a href="mailto:brian.carstensen@gmail.com">brian.carstensen@gmail.com</a></p>
+
+			<p>My website’s <a href="http://viewinglens.com/">http://viewinglens.com/</a>
+
+			<p>You might also be interested in these remote consoles:</p>
+
+			<ul>
+				<li><a href="http://jsconsole.com/">JSConsole</a></li>
+				<li><a href="http://pmuellr.github.com/weinre/">Weinre</a></li>
+			</ul>
+		</div>
+
+		<script src="/resources/js/analytics.js" type="text/javascript"></script>
+	</body>
+</html>
